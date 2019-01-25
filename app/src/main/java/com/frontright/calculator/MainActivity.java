@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             }
             case "=": {
                 addToEquation(key);
-                inputTextView.setText(calculate());
+                //inputTextView.setText(calculate());
             }
 
         }
@@ -62,7 +62,13 @@ public class MainActivity extends AppCompatActivity {
      * @return
      */
     public String calculate() {
-        
+        String[] inputs = equation.split(" ");
+
+        for (int i = 0; i < inputs.length; i++) {
+
+        }
+
+        return "0";
     }
 
     /**
@@ -79,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         String last = equation.length() > 3 ? equation.substring(equation.length() - 3) : "";
 
         // match on " + ", " - ", " \ ", " = ", or " * "
-        if (!last.isEmpty() && last.matches("\\ (\\+|\\-|\\*|\\/|\\=)\\ ")) {
+        if (!last.isEmpty() && last.matches("\\ (\\+|\\-|\\*|\\/|\\=)\\ ") && !input.matches("(1|2|3|4|5|6|7|8|9|0|\\.)")) {
             // remove the last 3 chars as it's the current operation
             equation = equation.substring(0, equation.length() - 3);
         }
