@@ -130,6 +130,16 @@ public class MainActivity extends AppCompatActivity {
         inputTextView.setText("");
     }
 
+    /**
+     * clear the fields
+     * @param view
+     */
+    public void clear(View view) {
+        equationTextView.setText("");
+        inputTextView.setText("");
+        equation = "";
+    }
+
     public void press1(View view) {
         press("1");
     }
