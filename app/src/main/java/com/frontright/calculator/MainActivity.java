@@ -62,8 +62,17 @@ public class MainActivity extends AppCompatActivity {
      * @return
      */
     public String calculate() {
-        String[] inputs = equation.split(" ");
-        double total = 0.0;
+        // split equation history by each = sign
+        String[] equations = equation.split(" = ");
+
+        // get the current equation (the last in the array)
+        String currentEquation = equations[equations.length - 1];
+
+        // apply operations to only the current equation
+        String[] inputs = currentEquation.split(" ");
+
+        // perform equation
+        double total = 0;
         String operator = "+";
         for (int i = 0; i < inputs.length; i++) {
             String value = inputs[i];
