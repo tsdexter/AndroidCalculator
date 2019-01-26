@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
+
 public class MainActivity extends AppCompatActivity {
 
     TextView inputTextView;
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         String[] inputs = currentEquation.split(" ");
 
         // perform equation
-        double total = 0;
+        BigDecimal total = BigDecimal.valueOf(0);
         String operator = "+";
         for (int i = 0; i < inputs.length; i++) {
             String value = inputs[i];
@@ -87,16 +89,16 @@ public class MainActivity extends AppCompatActivity {
             } else if (!value.equals("=")) {
                 switch (operator) {
                     case "+":
-                        total += Double.parseDouble(value);
+                        total = total.add(BigDecimal.valueOf(Double.parseDouble(value)));
                         break;
                     case "-":
-                        total -= Double.parseDouble(value);
+                        total = total.subtract(BigDecimal.valueOf(Double.parseDouble(value)));
                         break;
                     case "×":
-                        total *= Double.parseDouble(value);
+                        total = total.multiply(BigDecimal.valueOf(Double.parseDouble(value)));
                         break;
                     case "÷":
-                        total /= Double.parseDouble(value);
+                        total = total.divide(BigDecimal.valueOf(Double.parseDouble(value)));
                         break;
                 }
             }
@@ -104,10 +106,11 @@ public class MainActivity extends AppCompatActivity {
 
         // return nicely formatted string (ie: no .0 if unnecessary)
         // source: https://stackoverflow.com/questions/703396/how-to-nicely-format-floating-numbers-to-string-without-unnecessary-decimal-0
-        if(total == (long) total)
-            return String.format("%d", (long) total);
+        double totalDbl = total.doubleValue();
+        if(totalDbl == (long) totalDbl)
+            return String.format("%d", (long) totalDbl);
         else
-            return String.format("%s", total);
+            return String.format("%s", totalDbl);
     }
 
     /**
