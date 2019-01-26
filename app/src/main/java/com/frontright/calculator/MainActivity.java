@@ -3,6 +3,7 @@ package com.frontright.calculator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,11 +23,16 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Handle keypresses
-     * @param key
+     * @param view
      */
-    public void press(String key) {
+    public void press(View view) {
         String input = inputTextView.getText().toString();
 
+        // cast to button to get the text so we know which button was pressed
+        Button btn = (Button) view;
+        String key = btn.getText().toString();
+
+        // perform actions based on which button
         switch (key) {
             case "1":
             case "2":
@@ -44,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
             }
             case "+":
             case "-":
-            case "/":
-            case "*": {
+            case "÷":
+            case "×": {
                 addToEquation(key);
                 break;
             }
@@ -76,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         String operator = "+";
         for (int i = 0; i < inputs.length; i++) {
             String value = inputs[i];
-            if (value.matches("(\\+|\\-|\\*|\\/)")) {
+            if (value.matches("(\\+|\\-|\\×|\\÷)")) {
                 operator = value;
             } else if (!value.equals("=")) {
                 switch (operator) {
@@ -86,10 +92,10 @@ public class MainActivity extends AppCompatActivity {
                     case "-":
                         total -= Double.parseDouble(value);
                         break;
-                    case "*":
+                    case "×":
                         total *= Double.parseDouble(value);
                         break;
-                    case "/":
+                    case "÷":
                         total /= Double.parseDouble(value);
                         break;
                 }
@@ -138,69 +144,5 @@ public class MainActivity extends AppCompatActivity {
         equationTextView.setText("");
         inputTextView.setText("");
         equation = "";
-    }
-
-    public void press1(View view) {
-        press("1");
-    }
-
-    public void press2(View view) {
-        press("2");
-    }
-
-    public void press3(View view) {
-        press("3");
-    }
-
-    public void press4(View view) {
-        press("4");
-    }
-
-    public void press5(View view) {
-        press("5");
-    }
-
-    public void press6(View view) {
-        press("6");
-    }
-
-    public void press7(View view) {
-        press("7");
-    }
-
-    public void press8(View view) {
-        press("8");
-    }
-
-    public void press9(View view) {
-        press("9");
-    }
-
-    public void press0(View view) {
-        press("0");
-    }
-
-    public void pressDecimal(View view) {
-        press(".");
-    }
-
-    public void pressEquals(View view) {
-        press("=");
-    }
-
-    public void pressPlus(View view) {
-        press("+");
-    }
-
-    public void pressMinus(View view) {
-        press("-");
-    }
-
-    public void pressMultiply(View view) {
-        press("*");
-    }
-
-    public void pressDivide(View view) {
-        press("/");
     }
 }
