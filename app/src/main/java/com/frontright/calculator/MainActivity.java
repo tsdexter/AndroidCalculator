@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             }
             case "=": {
                 addToEquation(key);
-                //inputTextView.setText(calculate());
+                inputTextView.setText(calculate());
             }
 
         }
@@ -63,12 +63,36 @@ public class MainActivity extends AppCompatActivity {
      */
     public String calculate() {
         String[] inputs = equation.split(" ");
-
+        double total = 0.0;
+        String operator = "+";
         for (int i = 0; i < inputs.length; i++) {
-
+            String value = inputs[i];
+            if (value.matches("(\\+|\\-|\\*|\\/)")) {
+                operator = value;
+            } else if (!value.equals("=")) {
+                switch (operator) {
+                    case "+":
+                        total += Double.parseDouble(value);
+                        break;
+                    case "-":
+                        total -= Double.parseDouble(value);
+                        break;
+                    case "*":
+                        total *= Double.parseDouble(value);
+                        break;
+                    case "/":
+                        total /= Double.parseDouble(value);
+                        break;
+                }
+            }
         }
 
-        return "0";
+        // return nicely formatted string (ie: no .0 if unnecessary)
+        // source: https://stackoverflow.com/questions/703396/how-to-nicely-format-floating-numbers-to-string-without-unnecessary-decimal-0
+        if(total == (long) total)
+            return String.format("%d", (long) total);
+        else
+            return String.format("%s", total);
     }
 
     /**
@@ -79,14 +103,13 @@ public class MainActivity extends AppCompatActivity {
         String input = inputTextView.getText().toString();
         String operation = String.format(" %s ", key);
 
-        // don't add multiple operators - if 2nd last char is an operator
+        // don't add multiple operators
         // remove it and add the new one
-        // if length is not > 3 then no operator exists
-        String last = equation.length() > 3 ? equation.substring(equation.length() - 3) : "";
-
-        // match on " + ", " - ", " \ ", " = ", or " * "
-        if (!last.isEmpty() && last.matches("\\ (\\+|\\-|\\*|\\/|\\=)\\ ") && !input.matches("(1|2|3|4|5|6|7|8|9|0|\\.)")) {
-            // remove the last 3 chars as it's the current operation
+        if (equation.length() > 3 // must be greater than 3 to have an operator
+                && equation.substring(equation.length() - 1).equals(" ") // if the last char is a space it's an operator
+                && input.equals("")
+        ) {
+            // remove the last 3 chars to switch the operator
             equation = equation.substring(0, equation.length() - 3);
         }
 
