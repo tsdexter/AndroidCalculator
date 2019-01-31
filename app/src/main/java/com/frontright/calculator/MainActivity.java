@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.math.BigDecimal;
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
     public void press(View view) {
+        // get current input
         String input = inputTextView.getText().toString();
 
         // cast to button to get the text so we know which button was pressed
@@ -47,6 +49,13 @@ public class MainActivity extends AppCompatActivity {
             case "9":
             case "0":
             case ".": {
+                // if the last entry was = user must enter a new operator before more numbers
+                String last = !equation.isEmpty() ? equation.substring(equation.length() - 3) : "";
+                if (last.contains("=")) {
+                    Toast.makeText(this, "Must enter an operator first", Toast.LENGTH_LONG).show();
+                    break;
+                }
+                // append this key to the existing input
                 inputTextView.setText(String.format("%s%s", input, key));
                 break;
             }
@@ -54,15 +63,50 @@ public class MainActivity extends AppCompatActivity {
             case "-":
             case "÷":
             case "×": {
-                addToEquation(key);
+                // if there is an equation or input, add the operator to it
+                if (!equation.isEmpty() || !input.isEmpty())
+                    addToEquation(key);
                 break;
             }
             case "=": {
-                addToEquation(key);
-                inputTextView.setText(calculate());
+                // if there is an equation or input, add the equals and stick the
+                // calculated result into the input field
+                if (!equation.isEmpty() || !input.isEmpty()) {
+                    addToEquation(key);
+                    inputTextView.setText(calculate());
+                }
             }
 
         }
+    }
+
+    /**
+     * Add the input to the full equation
+     * @param key
+     */
+    public void addToEquation(String key) {
+        // get the current input
+        String input = inputTextView.getText().toString();
+
+        // format the operator that was pressed as space operator space
+        String operation = String.format(" %s ", key);
+
+        // don't add multiple operators
+        // remove it and add the new one
+        if (equation.length() > 3 // must be greater than 3 to have an operator
+                && equation.substring(equation.length() - 1).equals(" ") // if the last char is a space it's an operator
+                && input.equals("") // if input is also empty, last keypress was operator
+        ) {
+            // remove the last 3 chars to switch the operator
+            equation = equation.substring(0, equation.length() - 3);
+        }
+
+        // update the equation - append input and operation to existing equation
+        equation = String.format("%s%s%s", equation, input, operation);
+        equationTextView.setText(equation);
+
+        // reset the input
+        inputTextView.setText("");
     }
 
     /**
@@ -111,32 +155,6 @@ public class MainActivity extends AppCompatActivity {
             return String.format("%d", (long) totalDbl);
         else
             return String.format("%s", totalDbl);
-    }
-
-    /**
-     * Add the input to the full equation
-     * @param key
-     */
-    public void addToEquation(String key) {
-        String input = inputTextView.getText().toString();
-        String operation = String.format(" %s ", key);
-
-        // don't add multiple operators
-        // remove it and add the new one
-        if (equation.length() > 3 // must be greater than 3 to have an operator
-                && equation.substring(equation.length() - 1).equals(" ") // if the last char is a space it's an operator
-                && input.equals("")
-        ) {
-            // remove the last 3 chars to switch the operator
-            equation = equation.substring(0, equation.length() - 3);
-        }
-
-        // update the equation
-        equation = String.format("%s%s%s", equation, input, operation);
-        equationTextView.setText(equation);
-
-        // reset the input
-        inputTextView.setText("");
     }
 
     /**
